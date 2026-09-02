@@ -86,4 +86,6 @@ export const api = {
     request<T>(path, { method: 'GET', auth, signal }),
   post: <T>(path: string, body: unknown, auth = false) =>
     request<T>(path, { method: 'POST', body, auth }),
+  del: <T>(path: string, body: unknown, auth = false) =>
+    request<T>(path, { method: 'DELETE', body, auth }),
 };

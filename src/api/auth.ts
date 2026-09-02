@@ -23,6 +23,10 @@ export const authApi = {
 
   logout: () => api.post<{ message: string }>('/auth/logout', {}, true),
 
+  /** Irreversible. The backend anonymises the account and wipes personal data. */
+  deleteAccount: (password: string) =>
+    api.del<{ message: string }>('/auth/account', { password }, true),
+
   forgotPassword: (email: string) =>
     api.post<{ message: string; reset_token?: string }>('/auth/forgot-password', { email }),
 
