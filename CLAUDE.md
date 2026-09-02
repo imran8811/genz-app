@@ -28,7 +28,10 @@ Test on a **physical phone**: install **Expo Go**, scan the QR from `npm start`
 ### API base URL
 Set in `src/config.ts`. Defaults to the **live production API**
 `https://api.genzfoods.pk/api/v1` (same host the web app uses), so no local
-backend is needed to run the app.
+backend is needed to run the app. The **menu is not fetched from there**: like
+`genz-web`, this app reads it straight from the genz-admin feed
+(`ADMIN_MENU_URL` → `https://api.admin.genzfoods.pk/api/public/menu`, cached in
+AsyncStorage). web-apis handles auth, checkout and orders only.
 
 To point at a local backend instead, set `EXPO_PUBLIC_API_BASE_URL` (no code
 edit). On a physical device via Expo Go use your PC's LAN IP, not localhost:
@@ -66,10 +69,16 @@ Emulator hints: Android → `http://10.0.2.2:8000/api/v1`, iOS sim → `http://l
   Guests see sign-in / create-account prompts.
 
 ## Data sources
-- Ordering (menu pricing, cart, checkout, orders, auth): `genz-web-apis`.
+- Menu, deals and images: **`genz-admin-apis` public feed, read directly** (`ADMIN_MENU_URL`).
+- Auth, checkout, orders (and server-side re-pricing): `genz-web-apis`.
 - Menu/deal **images**: originate in [`genz-admin`](../genz-admin), arrive as
   absolute `image_url`s through `genz-web-apis` (cache-busted `?v=`). `FoodImage`
   falls back to a branded initial tile when an image is missing/fails.
+
+## Releasing
+See [RELEASE.md](./RELEASE.md) — signing, the AAB build, and the Play Store
+checklist. `android/` is committed on purpose (it holds the release signing
+config); never run `expo prebuild --clean`.
 
 ## Build status
 - ✅ Built & typechecks; bundles clean (`expo export`). Menu (sizes + deals),
